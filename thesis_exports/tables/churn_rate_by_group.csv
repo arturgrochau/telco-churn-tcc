@@ -1,0 +1,6 @@
+variable,higher_group,higher_customers,higher_churn_rate,comparison_group,comparison_customers,comparison_churn_rate
+Contract,Month-to-month,3875,0.4270967741935484,One or two years,3168,0.06755050505050506
+Tenure,12 months or less,2186,0.47438243366880145,More than 12 months,4857,0.17129915585752523
+Internet service,Fiber optic,3096,0.4189276485788114,DSL,2421,0.1895910780669145
+Payment method,Electronic check,2365,0.4528541226215645,Other methods,4678,0.17058572039333048
+Online security (internet customers),Without,3498,0.4176672384219554,With,2019,0.14611193660227836

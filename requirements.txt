@@ -1,0 +1,60 @@
+# Pinned runtime dependencies for the thesis notebook.
+#
+# ---------------------------------------------------------------------------
+# SYSTEM DEPENDENCY, NOT INSTALLABLE BY PIP — READ THIS FIRST ON macOS:
+#   brew install libomp
+# XGBoost's wheel links against the OpenMP runtime (libomp.dylib). Without it,
+# `import xgboost` raises XGBoostError: Library not loaded: @rpath/libomp.dylib
+# and the notebook fails on its first modeling cell. Confirmed 2026-09-07 on a
+# clean checkout: pip alone is not sufficient. Linux equivalent: libgomp1.
+# ---------------------------------------------------------------------------
+#
+# THIS IS THE ENVIRONMENT THAT PRODUCED THE COMMITTED EXPORTS.
+#
+# These direct dependency versions produced the committed analytical exports.
+# The September execution used Python 3.14.5; the October execution uses 3.14.6
+# under the same 3.14 minor-version pin. See docs/RELEASE_HISTORY.md for the
+# dated execution evidence. Transitive dependencies are not all pinned here.
+#
+# Do not "modernise" this file downward. scikit-learn 1.8 and XGBoost 3.2 do
+# not produce fits identical to 1.5 / 2.1, so relaxing or lowering a pin will
+# move the exported numbers that the written thesis cites. Two pins in
+# particular are load-bearing:
+#
+#   pandas>=3.0  — cells 8, 30 and 38 pass "str" to DataFrame.select_dtypes.
+#                  pandas 2.x raises TypeError: string dtypes are not allowed,
+#                  so the notebook cannot run at all on pandas 2.
+#   Python 3.14 — the tested interpreter series (see .python-version).
+#                  This is the reproducibility target, not a claim that every
+#                  dependency requires this Python version.
+#
+# To rebuild the environment:
+#
+#   uv venv --python 3.14
+#   uv pip install --python .venv/bin/python -r requirements.txt
+#
+# scripts/verify_reproducibility.sh does exactly this in a throwaway venv and
+# then executes the notebook headlessly.
+
+# --- Scientific / modeling stack ---
+numpy==2.4.6
+pandas==3.0.3
+scipy==1.17.1
+scikit-learn==1.8.0
+xgboost==3.2.0
+shap==0.51.0
+
+# --- Visualization ---
+matplotlib==3.10.9
+seaborn==0.13.2
+
+# --- Parallelism backend ---
+joblib==1.5.3
+
+# --- Notebook authoring + headless execution (verify_reproducibility.sh) ---
+ipython==9.13.0
+ipykernel==6.31.0
+jupyterlab==4.5.7
+nbconvert==7.17.1
+nbclient==0.10.4
+nbformat==5.10.4

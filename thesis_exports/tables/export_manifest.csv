@@ -1,0 +1,83 @@
+name,type,format,phase,producing_cell,path,source,status
+eda_categorical_distributions,figure,pdf,1. Data Understanding,EDA figure cells,thesis_exports/figures/eda_categorical_distributions.pdf,notebook,exported
+eda_categorical_distributions,figure,png,1. Data Understanding,EDA figure cells,thesis_exports/figures/eda_categorical_distributions.png,notebook,exported
+eda_churn_distribution,figure,pdf,1. Data Understanding,EDA figure cells,thesis_exports/figures/eda_churn_distribution.pdf,notebook,exported
+eda_churn_distribution,figure,png,1. Data Understanding,EDA figure cells,thesis_exports/figures/eda_churn_distribution.png,notebook,exported
+eda_churn_gap_plot,figure,pdf,1. Data Understanding,EDA figure cells,thesis_exports/figures/eda_churn_gap_plot.pdf,notebook,exported
+eda_churn_gap_plot,figure,png,1. Data Understanding,EDA figure cells,thesis_exports/figures/eda_churn_gap_plot.png,notebook,exported
+eda_correlation_matrix,figure,pdf,1. Data Understanding,EDA figure cells,thesis_exports/figures/eda_correlation_matrix.pdf,notebook,exported
+eda_correlation_matrix,figure,png,1. Data Understanding,EDA figure cells,thesis_exports/figures/eda_correlation_matrix.png,notebook,exported
+eda_numeric_distributions,figure,pdf,1. Data Understanding,EDA figure cells,thesis_exports/figures/eda_numeric_distributions.pdf,notebook,exported
+eda_numeric_distributions,figure,png,1. Data Understanding,EDA figure cells,thesis_exports/figures/eda_numeric_distributions.png,notebook,exported
+eda_numeric_vs_churn,figure,pdf,1. Data Understanding,EDA figure cells,thesis_exports/figures/eda_numeric_vs_churn.pdf,notebook,exported
+eda_numeric_vs_churn,figure,png,1. Data Understanding,EDA figure cells,thesis_exports/figures/eda_numeric_vs_churn.png,notebook,exported
+model_calibration,figure,pdf,2. Evaluation,calibration cell,thesis_exports/figures/model_calibration.pdf,notebook,exported
+model_calibration,figure,png,2. Evaluation,calibration cell,thesis_exports/figures/model_calibration.png,notebook,exported
+model_learning_curve,figure,pdf,2. Evaluation,learning-curve cell,thesis_exports/figures/model_learning_curve.pdf,notebook,exported
+model_learning_curve,figure,png,2. Evaluation,learning-curve cell,thesis_exports/figures/model_learning_curve.png,notebook,exported
+model_repeated_cv_auc,figure,pdf,2. Evaluation,repeated cross-validation cell,thesis_exports/figures/model_repeated_cv_auc.pdf,notebook,exported
+model_repeated_cv_auc,figure,png,2. Evaluation,repeated cross-validation cell,thesis_exports/figures/model_repeated_cv_auc.png,notebook,exported
+model_roc_comparison,figure,pdf,2. Modeling,holdout ROC figure cell,thesis_exports/figures/model_roc_comparison.pdf,notebook,exported
+model_roc_comparison,figure,png,2. Modeling,holdout ROC figure cell,thesis_exports/figures/model_roc_comparison.png,notebook,exported
+shap_dependence_contract,figure,pdf,3. SHAP,SHAP dependence-plot cell,thesis_exports/figures/shap_dependence_contract.pdf,notebook,exported
+shap_dependence_contract,figure,png,3. SHAP,SHAP dependence-plot cell,thesis_exports/figures/shap_dependence_contract.png,notebook,exported
+shap_dependence_internetservice,figure,pdf,3. SHAP,SHAP dependence-plot cell,thesis_exports/figures/shap_dependence_internetservice.pdf,notebook,exported
+shap_dependence_internetservice,figure,png,3. SHAP,SHAP dependence-plot cell,thesis_exports/figures/shap_dependence_internetservice.png,notebook,exported
+shap_dependence_monthlycharges,figure,pdf,3. SHAP,SHAP dependence-plot cell,thesis_exports/figures/shap_dependence_monthlycharges.pdf,notebook,exported
+shap_dependence_monthlycharges,figure,png,3. SHAP,SHAP dependence-plot cell,thesis_exports/figures/shap_dependence_monthlycharges.png,notebook,exported
+shap_dependence_onlinesecurity,figure,pdf,3. SHAP,SHAP dependence-plot cell,thesis_exports/figures/shap_dependence_onlinesecurity.pdf,notebook,exported
+shap_dependence_onlinesecurity,figure,png,3. SHAP,SHAP dependence-plot cell,thesis_exports/figures/shap_dependence_onlinesecurity.png,notebook,exported
+shap_dependence_tenure,figure,pdf,3. SHAP,SHAP dependence-plot cell,thesis_exports/figures/shap_dependence_tenure.pdf,notebook,exported
+shap_dependence_tenure,figure,png,3. SHAP,SHAP dependence-plot cell,thesis_exports/figures/shap_dependence_tenure.png,notebook,exported
+shap_summary_beeswarm,figure,pdf,3. SHAP,global SHAP figure cells,thesis_exports/figures/shap_summary_beeswarm.pdf,notebook,exported
+shap_summary_beeswarm,figure,png,3. SHAP,global SHAP figure cells,thesis_exports/figures/shap_summary_beeswarm.png,notebook,exported
+shap_waterfall_borderline_near_threshold,figure,pdf,3. SHAP,local waterfall cell,thesis_exports/figures/shap_waterfall_borderline_near_threshold.pdf,notebook,exported
+shap_waterfall_borderline_near_threshold,figure,png,3. SHAP,local waterfall cell,thesis_exports/figures/shap_waterfall_borderline_near_threshold.png,notebook,exported
+shap_waterfall_fn_missed_churn,figure,pdf,3. SHAP,local waterfall cell,thesis_exports/figures/shap_waterfall_fn_missed_churn.pdf,notebook,exported
+shap_waterfall_fn_missed_churn,figure,png,3. SHAP,local waterfall cell,thesis_exports/figures/shap_waterfall_fn_missed_churn.png,notebook,exported
+shap_waterfall_fp_high_risk,figure,pdf,3. SHAP,local waterfall cell,thesis_exports/figures/shap_waterfall_fp_high_risk.pdf,notebook,exported
+shap_waterfall_fp_high_risk,figure,png,3. SHAP,local waterfall cell,thesis_exports/figures/shap_waterfall_fp_high_risk.png,notebook,exported
+shap_waterfall_tn_low_risk,figure,pdf,3. SHAP,local waterfall cell,thesis_exports/figures/shap_waterfall_tn_low_risk.pdf,notebook,exported
+shap_waterfall_tn_low_risk,figure,png,3. SHAP,local waterfall cell,thesis_exports/figures/shap_waterfall_tn_low_risk.png,notebook,exported
+shap_waterfall_tp_high_risk,figure,pdf,3. SHAP,local waterfall cell,thesis_exports/figures/shap_waterfall_tp_high_risk.pdf,notebook,exported
+shap_waterfall_tp_high_risk,figure,png,3. SHAP,local waterfall cell,thesis_exports/figures/shap_waterfall_tp_high_risk.png,notebook,exported
+split_ratio_sensitivity,figure,pdf,2. Evaluation,split-ratio sensitivity cell,thesis_exports/figures/split_ratio_sensitivity.pdf,notebook,exported
+split_ratio_sensitivity,figure,png,2. Evaluation,split-ratio sensitivity cell,thesis_exports/figures/split_ratio_sensitivity.png,notebook,exported
+tenure_cohort_performance,figure,pdf,2. Evaluation,tenure-cohort cell,thesis_exports/figures/tenure_cohort_performance.pdf,notebook,exported
+tenure_cohort_performance,figure,png,2. Evaluation,tenure-cohort cell,thesis_exports/figures/tenure_cohort_performance.png,notebook,exported
+threshold_cost_curves,figure,pdf,2. Evaluation,descriptive holdout threshold-sensitivity cell,thesis_exports/figures/threshold_cost_curves.pdf,notebook,exported
+threshold_cost_curves,figure,png,2. Evaluation,descriptive holdout threshold-sensitivity cell,thesis_exports/figures/threshold_cost_curves.png,notebook,exported
+threshold_flag_counts,figure,pdf,2. Evaluation,descriptive holdout threshold-sensitivity cell,thesis_exports/figures/threshold_flag_counts.pdf,notebook,exported
+threshold_flag_counts,figure,png,2. Evaluation,descriptive holdout threshold-sensitivity cell,thesis_exports/figures/threshold_flag_counts.png,notebook,exported
+churn_rate_by_group,table,csv,1. Data Understanding,churn rate by group cell,thesis_exports/tables/churn_rate_by_group.csv,notebook,exported
+class_balance_summary,table,csv,1. Data Preparation,stratified train/test split cell,thesis_exports/tables/class_balance_summary.csv,notebook,exported
+data_quality_missing_comparison,table,csv,1. Data Preparation,missing-value handling cell,thesis_exports/tables/data_quality_missing_comparison.csv,notebook,exported
+export_manifest,table,csv,Manifest,this cell (regenerated from disk),thesis_exports/tables/export_manifest.csv,notebook,exported
+finding_traceability_matrix,table,csv,Editorial,hand-maintained outside the notebook,thesis_exports/tables/finding_traceability_matrix.csv,manual,hand-maintained
+inference_latency,table,csv,2. Evaluation,inference-cost cell (machine-dependent),thesis_exports/tables/inference_latency.csv,notebook,exported
+model_auc_pairwise_tests,table,csv,2. Evaluation,pairwise AUC-test cell,thesis_exports/tables/model_auc_pairwise_tests.csv,notebook,exported
+model_comparison_metrics,table,csv,2. Evaluation,calibration cell (single write),thesis_exports/tables/model_comparison_metrics.csv,notebook,exported
+model_cv_scores,table,csv,2. Evaluation,stratified cross-validation cell,thesis_exports/tables/model_cv_scores.csv,notebook,exported
+model_learning_curve,table,csv,2. Evaluation,learning-curve cell,thesis_exports/tables/model_learning_curve.csv,notebook,exported
+model_overfitting_gap,table,csv,2. Evaluation,train-vs-test gap cell,thesis_exports/tables/model_overfitting_gap.csv,notebook,exported
+model_ranking,table,csv,2. Evaluation,fixed explanation-model / descriptive-ranking cell,thesis_exports/tables/model_ranking.csv,notebook,exported
+model_repeated_cv_scores,table,csv,2. Evaluation,repeated cross-validation cell,thesis_exports/tables/model_repeated_cv_scores.csv,notebook,exported
+model_repeated_cv_summary,table,csv,2. Evaluation,repeated cross-validation cell,thesis_exports/tables/model_repeated_cv_summary.csv,notebook,exported
+objective_traceability_matrix,table,csv,Editorial,hand-maintained outside the notebook,thesis_exports/tables/objective_traceability_matrix.csv,manual,hand-maintained
+permutation_importance_xgboost,table,csv,2. Evaluation,permutation-importance cell,thesis_exports/tables/permutation_importance_xgboost.csv,notebook,exported
+shap_behavioral_translation,table,csv,3. SHAP,behavioral-translation cell,thesis_exports/tables/shap_behavioral_translation.csv,notebook,exported
+shap_case_driver_table,table,csv,3. SHAP,local waterfall cell,thesis_exports/tables/shap_case_driver_table.csv,notebook,exported
+shap_case_overview,table,csv,3. SHAP,local-case selection cell,thesis_exports/tables/shap_case_overview.csv,notebook,exported
+shap_driver_action_matrix,table,csv,3. SHAP,driver-to-action matrix cell,thesis_exports/tables/shap_driver_action_matrix.csv,notebook,exported
+shap_feature_importance_grouped,table,csv,3. SHAP,grouped SHAP importance cell,thesis_exports/tables/shap_feature_importance_grouped.csv,notebook,exported
+shap_feature_importance_transformed,table,csv,3. SHAP,transformed-feature SHAP importance cell,thesis_exports/tables/shap_feature_importance_transformed.csv,notebook,exported
+split_ratio_sensitivity,table,csv,2. Evaluation,split-ratio sensitivity cell,thesis_exports/tables/split_ratio_sensitivity.csv,notebook,exported
+svm_decision_rule_metrics,table,csv,2. Evaluation,holdout evaluation cell (SVM own decision rule),thesis_exports/tables/svm_decision_rule_metrics.csv,notebook,exported
+tenure_cohort_performance,table,csv,2. Evaluation,tenure-cohort cell,thesis_exports/tables/tenure_cohort_performance.csv,notebook,exported
+threshold_cost_optima,table,csv,2. Evaluation,descriptive holdout threshold-sensitivity cell,thesis_exports/tables/threshold_cost_optima.csv,notebook,exported
+threshold_sweep_logistic_regression,table,csv,2. Evaluation,descriptive holdout threshold-sensitivity cell,thesis_exports/tables/threshold_sweep_logistic_regression.csv,notebook,exported
+threshold_sweep_mlp,table,csv,2. Evaluation,descriptive holdout threshold-sensitivity cell,thesis_exports/tables/threshold_sweep_mlp.csv,notebook,exported
+threshold_sweep_random_forest,table,csv,2. Evaluation,descriptive holdout threshold-sensitivity cell,thesis_exports/tables/threshold_sweep_random_forest.csv,notebook,exported
+threshold_sweep_svm,table,csv,2. Evaluation,descriptive holdout threshold-sensitivity cell,thesis_exports/tables/threshold_sweep_svm.csv,notebook,exported
+threshold_sweep_xgboost,table,csv,2. Evaluation,descriptive holdout threshold-sensitivity cell,thesis_exports/tables/threshold_sweep_xgboost.csv,notebook,exported
+train_test_split_summary,table,csv,1. Data Preparation,stratified train/test split cell,thesis_exports/tables/train_test_split_summary.csv,notebook,exported

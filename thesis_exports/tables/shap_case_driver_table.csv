@@ -1,0 +1,6 @@
+case,index,pred_proba,y_true,top_positive_drivers,top_negative_drivers
+TP_high_risk,3380,0.9178826808929443,1,"tenure (1.004), Contract_Month-to-month (0.435), InternetService_Fiber optic (0.291)","Contract_One year (-0.011), PhoneService_No (-0.005), PhoneService_Yes (-0.003)"
+FP_high_risk,3346,0.8326393365859985,0,"tenure (0.641), Contract_Month-to-month (0.457), InternetService_Fiber optic (0.278)","StreamingTV_Yes (-0.052), Contract_One year (-0.012), PhoneService_No (-0.005)"
+TN_low_risk,4201,0.005799289792776108,0,"StreamingTV_No (0.002), Partner_Yes (0.002), TechSupport_Yes (0.002)","tenure (-1.009), Contract_Month-to-month (-0.661), Contract_Two year (-0.509)"
+FN_missed_churn,4513,0.012009167112410069,1,"StreamingMovies_Yes (0.086), SeniorCitizen_No (0.078), MultipleLines_No (0.075)","tenure (-1.106), Contract_Month-to-month (-0.624), Contract_Two year (-0.532)"
+Borderline_near_threshold,1114,0.5004222989082336,0,"Contract_Month-to-month (0.413), MonthlyCharges (0.352), InternetService_Fiber optic (0.281)","tenure (-0.399), PaymentMethod_Electronic check (-0.159), TotalCharges (-0.115)"

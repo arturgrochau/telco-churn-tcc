@@ -1,0 +1,76 @@
+model,fold,roc_auc
+Logistic Regression,0,0.848226
+Logistic Regression,1,0.825265
+Logistic Regression,2,0.841408
+Logistic Regression,3,0.86327
+Logistic Regression,4,0.853324
+Logistic Regression,5,0.861717
+Logistic Regression,6,0.83383
+Logistic Regression,7,0.847269
+Logistic Regression,8,0.837645
+Logistic Regression,9,0.852358
+Logistic Regression,10,0.850405
+Logistic Regression,11,0.860778
+Logistic Regression,12,0.833428
+Logistic Regression,13,0.855628
+Logistic Regression,14,0.830891
+Random Forest,0,0.842234
+Random Forest,1,0.835302
+Random Forest,2,0.844853
+Random Forest,3,0.857272
+Random Forest,4,0.860462
+Random Forest,5,0.866766
+Random Forest,6,0.833584
+Random Forest,7,0.85569
+Random Forest,8,0.83921
+Random Forest,9,0.854367
+Random Forest,10,0.847255
+Random Forest,11,0.864262
+Random Forest,12,0.834676
+Random Forest,13,0.859849
+Random Forest,14,0.835805
+XGBoost,0,0.84615
+XGBoost,1,0.832661
+XGBoost,2,0.848715
+XGBoost,3,0.864805
+XGBoost,4,0.862789
+XGBoost,5,0.869783
+XGBoost,6,0.839281
+XGBoost,7,0.853049
+XGBoost,8,0.839457
+XGBoost,9,0.85665
+XGBoost,10,0.849082
+XGBoost,11,0.867725
+XGBoost,12,0.836631
+XGBoost,13,0.859913
+XGBoost,14,0.834404
+SVM,0,0.840148
+SVM,1,0.828496
+SVM,2,0.839639
+SVM,3,0.856581
+SVM,4,0.844718
+SVM,5,0.857524
+SVM,6,0.827731
+SVM,7,0.84537
+SVM,8,0.834386
+SVM,9,0.849284
+SVM,10,0.840691
+SVM,11,0.856246
+SVM,12,0.827729
+SVM,13,0.851972
+SVM,14,0.836193
+MLP,0,0.847515
+MLP,1,0.826537
+MLP,2,0.840301
+MLP,3,0.863258
+MLP,4,0.848536
+MLP,5,0.850403
+MLP,6,0.831504
+MLP,7,0.84642
+MLP,8,0.836066
+MLP,9,0.853013
+MLP,10,0.836219
+MLP,11,0.861723
+MLP,12,0.82539
+MLP,13,0.857845
+MLP,14,0.832331

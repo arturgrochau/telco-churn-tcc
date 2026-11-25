@@ -1,0 +1,16 @@
+model,train_frac,test_frac,roc_auc
+Logistic Regression,0.8,0.2,0.841559
+Random Forest,0.8,0.2,0.843383
+XGBoost,0.8,0.2,0.84801
+SVM,0.8,0.2,0.835635
+MLP,0.8,0.2,0.839125
+Logistic Regression,0.7,0.3,0.844942
+Random Forest,0.7,0.3,0.843239
+XGBoost,0.7,0.3,0.847125
+SVM,0.7,0.3,0.83437
+MLP,0.7,0.3,0.83583
+Logistic Regression,0.5,0.5,0.84107
+Random Forest,0.5,0.5,0.840713
+XGBoost,0.5,0.5,0.843707
+SVM,0.5,0.5,0.835483
+MLP,0.5,0.5,0.839455

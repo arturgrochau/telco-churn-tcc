@@ -1,0 +1,2 @@
+rule,flagged,precision,recall,f1_score,max_probability,share_margin_within_0_02_of_plus_minus_1
+decision_function > 0,671,0.457526,0.820856,0.58756,0.467005,0.850958

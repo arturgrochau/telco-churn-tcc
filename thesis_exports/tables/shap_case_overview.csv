@@ -1,0 +1,6 @@
+case,index,y_true,y_pred,pred_proba
+TP_high_risk,3380,1,1,0.9178826808929443
+FP_high_risk,3346,0,1,0.8326393365859985
+TN_low_risk,4201,0,0,0.005799289792776108
+FN_missed_churn,4513,1,0,0.012009167112410069
+Borderline_near_threshold,1114,0,1,0.5004222989082336
