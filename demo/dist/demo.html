@@ -33,7 +33,9 @@
   section.ch + section.ch { border-top: 1px solid var(--line); margin-top: 32px; }
   .secno { font: 600 13px/1 var(--sans); color: var(--accent); letter-spacing: 0.04em; }
   h2 { font: 600 25px/1.25 var(--serif); margin: 8px 0 10px; max-width: 760px; }
-  .lede { margin: 0 0 22px; max-width: 700px; color: #2f3747; }
+  .finding { margin: 0 0 8px; max-width: 760px; font-size: 16px; }
+  .lede { margin: 0 0 22px; max-width: 760px; color: var(--muted); font-size: 14px; }
+  .lede .src { color: var(--faint); }
   .exhibit { margin: 22px 0 0; }
   .ex-title { font-size: 13px; font-weight: 650; margin: 0 0 8px; }
   .ex-title .src { font-weight: 400; color: var(--faint); }
@@ -137,7 +139,7 @@
   .wf-row.scale .track span { position: absolute; transform: translateX(-50%); }
   .legend { font-size: 12px; color: var(--muted); margin: 6px 0 0; }
   .legend i { display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin: 0 4px -1px 0; }
-  .hyp { display: grid; grid-template-columns: 140px 1fr; margin: 0; font-size: 13.5px; }
+  .hyp { display: grid; grid-template-columns: 175px 1fr; margin: 0; font-size: 13.5px; }
   .hyp dt, .hyp dd { padding: 7px 0; border-bottom: 1px solid var(--line); margin: 0; }
   .hyp dt { color: var(--muted); font-weight: 600; padding-right: 12px; }
   .hyp dt:last-of-type, .hyp dd:last-of-type { border-bottom: 0; }
@@ -168,23 +170,24 @@
 <body>
 <header class="hero">
   <div class="col">
-    <p class="kicker">Companion to the TCC · FGV ECMI · 2026</p>
-    <h1>Who leaves a subscription service, and what a model can say about it</h1>
-    <p class="dek">Five classifiers on IBM's Telco benchmark, the cutoff that decides who is flagged, and the signals XGBoost relies on, read as hypotheses for communication.</p>
+    <p class="kicker">Offline demonstration · TCC, FGV ECMI, 2026</p>
+    <h1>Customer Churn Classification on a Telecom Benchmark</h1>
+    <p class="dek">The results of TCC Chapter 5, recalculated in the browser. Data: IBM Telco Customer Churn, a sample of a fictional operator, in which churn records a departure in the last month.</p>
     <div class="facts">
-      <div class="fact"><b id="f-rows"></b><span>customers of a fictional operator</span></div>
-      <div class="fact"><b id="f-left"></b><span>left in the last month</span></div>
+      <div class="fact"><b id="f-rows"></b><span>customers</span></div>
+      <div class="fact"><b id="f-left"></b><span>churned</span></div>
       <div class="fact"><b>5</b><span>models compared</span></div>
-      <div class="fact"><b id="f-auc"></b><span>range of ROC-AUC on the test set</span></div>
+      <div class="fact"><b id="f-auc"></b><span>holdout ROC-AUC, five models</span></div>
     </div>
   </div>
 </header>
 
 <main class="col">
   <section class="ch" id="sec-data" aria-labelledby="h-data">
-    <div class="secno">5.1 · The data</div>
-    <h2 id="h-data">Churn is higher on month-to-month contracts and in the first year</h2>
-    <p class="lede">Each row is one customer: 19 descriptive variables, an ID and whether they left. The models learn from <span id="n-train"></span> customers and are tested on the other <span class="n-test"></span>.</p>
+    <div class="secno">5.1</div>
+    <h2 id="h-data">Who Leaves</h2>
+    <p class="finding"><b>Main finding:</b> churn rates are higher among customers on month-to-month contracts and among customers in their first year.</p>
+    <p class="lede">One row per customer: customerID, 19 predictors and Churn. Training set: <span id="n-train"></span> customers. Holdout: <span class="n-test"></span> (stratified 80/20 split).</p>
     <div class="exhibit">
       <div class="cell">
         <div class="in"><span class="prompt">In [1]:</span>df.head()</div>
@@ -195,7 +198,7 @@
       </div>
     </div>
     <div class="exhibit">
-      <p class="ex-title">Share who left, by group <span class="src">· TCC Table 2</span></p>
+      <p class="ex-title">Churn rate by group <span class="src">· TCC Table 2</span></p>
       <div class="tbl"><table class="rt">
         <thead><tr><th>Variable</th><th>Group</th><th class="num">Customers</th><th class="num">Left</th><th></th></tr></thead>
         <tbody id="groups"></tbody>
@@ -204,44 +207,47 @@
   </section>
 
   <section class="ch" id="sec-models" aria-labelledby="h-models">
-    <div class="secno">5.2 · Five models</div>
-    <h2 id="h-models">The five models rank customers almost equally well</h2>
-    <p class="lede">ROC-AUC is the chance that a customer who left gets a higher score than one who stayed (0.5 is a coin flip). XGBoost is slightly ahead.</p>
+    <div class="secno">5.2</div>
+    <h2 id="h-models">Five Models Compared</h2>
+    <p class="finding"><b>Main finding:</b> the five models order customers almost equally well, and XGBoost is slightly ahead.</p>
+    <p class="lede">ROC-AUC: the probability that a randomly chosen churner receives a higher score than a randomly chosen customer who stayed (0.5 is chance). Holdout of <span class="n-test"></span> customers. <span class="src">TCC Table 3.</span></p>
     <div class="tbl"><table class="rt">
       <thead><tr><th>Model</th><th class="num">ROC-AUC</th><th id="ci-head">95% interval</th><th class="num">Precision</th><th class="num">Recall</th><th class="num">Brier</th></tr></thead>
       <tbody id="model-table"></tbody>
     </table></div>
-    <p class="note">Precision and recall at the 0.50 cutoff. The SVM flags nobody there, so its precision is undefined. Brier is the squared error of the probabilities; lower is better. Each interval describes one model; paired differences are tested in TCC Section 5.2 (exploratory, unadjusted).</p>
+    <p class="note">Precision and recall at the 0.50 cutoff. The SVM flags nobody there, so its precision is undefined. Brier: mean squared error of the probabilities (lower is better). 95% intervals from 1,000 bootstrap resamples, one per model; the pairwise DeLong tests are in Section 5.2 and Appendix B.</p>
   </section>
 
   <section class="ch" id="sec-cutoff" aria-labelledby="h-cutoff">
-    <div class="secno">5.3 · The cutoff</div>
-    <h2 id="h-cutoff">The cutoff decides who is flagged</h2>
-    <p class="lede">XGBoost flags a customer when the score reaches the cutoff. A lower cutoff finds more of the customers who left, and flags more who stayed.</p>
+    <div class="secno">5.3</div>
+    <h2 id="h-cutoff">The Cutoff as a Communication Decision</h2>
+    <p class="finding"><b>Main finding:</b> lowering the XGBoost cutoff increases both the number of churners flagged and the number of flagged customers who stayed.</p>
+    <p class="lede">A customer is flagged when the XGBoost score is at or above the cutoff. The presets are the three cutoffs of TCC Table 4.</p>
     <div class="slider">
       <label for="thr">Cutoff</label>
       <input type="range" id="thr" min="0.05" max="0.95" step="0.01" value="0.5">
       <output id="thr-value" for="thr">0.50</output>
-      <span class="presets">TCC 5.3: <button class="btn" data-cut="0.50">0.50</button><button class="btn" data-cut="0.35">0.35</button><button class="btn" data-cut="0.07">0.07</button></span>
+      <span class="presets">Table 4: <button class="btn" data-cut="0.50">0.50</button><button class="btn" data-cut="0.35">0.35</button><button class="btn" data-cut="0.07">0.07</button></span>
     </div>
     <p class="story" id="cut-story"></p>
     <div class="exhibit ct">
       <div class="tbl"><table class="rt">
-        <thead><tr><th>Test customers</th><th class="num">Flagged</th><th class="num">Not flagged</th><th class="num">Total</th></tr></thead>
+        <thead><tr><th>Holdout customers</th><th class="num">Flagged</th><th class="num">Not flagged</th><th class="num">Total</th></tr></thead>
         <tbody>
           <tr><td>Left</td><td class="num"><b id="k-tp"></b></td><td class="num" id="k-fn"></td><td class="num dim" id="n-left"></td></tr>
           <tr><td>Stayed</td><td class="num" id="k-fp"></td><td class="num" id="k-tn"></td><td class="num dim" id="n-stayed"></td></tr>
           <tr><td>Total</td><td class="num"><b id="k-flagged"></b></td><td class="num dim" id="k-unflagged"></td><td class="num dim" id="k-total"></td></tr>
         </tbody>
       </table></div>
-      <p class="note">Recall <b id="k-recall"></b> of those who left are flagged. Precision <b id="k-precision"></b> of the flagged left. No campaign or retention effect was measured.</p>
+      <p class="note">Recall <b id="k-recall"></b> (churners flagged / all churners). Precision <b id="k-precision"></b> (churners flagged / all flagged). The cutoffs are examined on the same holdout; no campaign or retention effect was measured.</p>
     </div>
   </section>
 
   <section class="ch" id="sec-signals" aria-labelledby="h-signals">
-    <div class="secno">5.4 · Signals</div>
-    <h2 id="h-signals">Contract and tenure come first in what XGBoost relies on</h2>
-    <p class="lede">SHAP splits each score into one contribution per variable. Averaged over the test customers, the size of those contributions ranks the variables.</p>
+    <div class="secno">5.4</div>
+    <h2 id="h-signals">Signals the Model Relies On</h2>
+    <p class="finding"><b>Main finding:</b> contract type and tenure account for 40.2% of the total SHAP attribution magnitude on the holdout.</p>
+    <p class="lede">Mean |SHAP|: the average size of a variable's contribution to the XGBoost log-odds over the holdout. <span class="src">TCC Table 5.</span></p>
     <div class="tbl"><table class="rt">
       <thead><tr><th>Variable</th><th class="num">Mean |SHAP|</th><th class="num">Share</th><th></th></tr></thead>
       <tbody id="importance"></tbody>
@@ -250,9 +256,10 @@
   </section>
 
   <section class="ch" id="sec-customer" aria-labelledby="h-customer">
-    <div class="secno">5.5 · One customer</div>
-    <h2 id="h-customer">From one score to a hypothesis a platform could test</h2>
-    <p class="lede">Pick a test customer. The model is right about some and wrong about others.</p>
+    <div class="secno">5.5</div>
+    <h2 id="h-customer">From Signals to Communication Hypotheses</h2>
+    <p class="finding"><b>Main finding:</b> each signal becomes a question that a platform can test.</p>
+    <p class="lede">Five holdout customers selected in the notebook, labelled by recorded churn and flag at 0.50. For the selected customer: the recorded row, the XGBoost score, the largest SHAP contributions and the Table 6 row of the largest contribution that has one.</p>
     <div class="cases" id="examples" role="group" aria-label="Test customers"></div>
     <div class="exhibit">
       <div class="cell">
@@ -262,10 +269,10 @@
     </div>
     <div class="cust-grid">
       <div class="tweak" id="inputs-col">
-        <div class="tweak-head"><h3>Change a value</h3><button class="btn" id="profile-reset">Reset</button></div>
-        <p class="hint">The five variables XGBoost relies on most. The row above and the score follow.</p>
+        <div class="tweak-head"><h3>Edit values</h3><button class="btn" id="profile-reset">Reset</button></div>
+        <p class="hint">The five variables of Table 5. The row, the scores and the SHAP values are recalculated.</p>
         <div id="profile"></div>
-        <p class="derived">Changing tenure adds or removes months at the current MonthlyCharges in TotalCharges. An edit shows how the model responds, not the effect of a real change.</p>
+        <p class="derived">TotalCharges: months added or removed are charged at the current MonthlyCharges. An edit shows how the model responds, not the effect of a real change.</p>
       </div>
       <div id="panel-customer">
         <div class="block">
@@ -274,13 +281,13 @@
           <div class="gauge" aria-hidden="true"><div class="fill" id="gauge-fill"></div><div class="mark" id="gauge-mark"></div></div>
           <div class="gauge-scale" aria-hidden="true"><span id="gauge-label"></span></div>
           <div class="chips"><span class="chip" id="main-flag"></span><span class="chip" id="cust-truth"></span><span class="chip edit" id="edited-chip" hidden>Edited</span></div>
-          <div class="kv-line"><span>Logistic regression, same customer</span><b id="lr-score"></b></div>
+          <div class="kv-line"><span>Logistic regression score</span><b id="lr-score"></b></div>
           <p id="live" class="sr-only" aria-live="polite"></p>
         </div>
         <div class="block">
-          <h3>Why this score</h3>
+          <h3>SHAP contributions</h3>
           <div class="wf" id="main-signals"></div>
-          <p class="legend"><i style="background:var(--up)"></i>raises the score <i style="background:var(--down);margin-left:10px"></i>lowers it · log-odds scale, starting from the model baseline (average log-odds)</p>
+          <p class="legend"><i style="background:var(--up)"></i>toward churn <i style="background:var(--down);margin-left:10px"></i>away from churn · log-odds, from the SHAP baseline E[f(X)]</p>
         </div>
         <div class="block">
           <h3>Hypothesis <span>TCC Table 6</span></h3>
@@ -292,7 +299,7 @@
 </main>
 <footer class="col">
   <p>Artur Pedrotti Grochau, FGV ECMI, 2026. Companion to the TCC <i>Customer Churn Classification on a Telecom Benchmark</i>. Notebook, data and source: <a href="https://github.com/arturgrochau/telco-churn-tcc">github.com/arturgrochau/telco-churn-tcc</a>.</p>
-  <p>IBM's sample describes a fictional operator, and churn records a departure in the last month, so scores are not forecasts. SHAP describes the model, not why a customer left. Hypotheses are the author's proposals, not measured results.</p>
+  <p>Scores are not forecasts of future churn. SHAP describes the fitted model, not the reasons a customer left. The hypotheses are the author's proposals; the Telco data does not measure them.</p>
   <p>The browser recalculates the XGBoost and logistic regression scores and the SHAP values. <span id="selfcheck" role="status"></span></p>
 </footer>
 <script>
@@ -637,11 +644,11 @@ if (typeof module !== "undefined") {
   const MODEL_LABEL = { "Logistic Regression": "Logistic regression", "Random Forest": "Random forest" };
   const ADDONS = ["OnlineSecurity", "OnlineBackup", "DeviceProtection", "TechSupport", "StreamingTV", "StreamingMovies"];
   const CASE_LABEL = {
-    TP_high_risk: ["Left, high score", "the model was right"],
-    FP_high_risk: ["Stayed, high score", "a false alarm"],
-    TN_low_risk: ["Stayed, low score", "the model was right"],
-    FN_missed_churn: ["Left, low score", "missed by the model"],
-    Borderline_near_threshold: ["Near the cutoff", "score close to 0.50"],
+    TP_high_risk: "Churned, flagged",
+    FP_high_risk: "Stayed, flagged",
+    TN_low_risk: "Stayed, not flagged",
+    FN_missed_churn: "Churned, not flagged",
+    Borderline_near_threshold: "Near the cutoff",
   };
   const SHOWN = 6; // waterfall rows before "Other"
   const $ = (id) => document.getElementById(id);
@@ -733,7 +740,7 @@ if (typeof module !== "undefined") {
     $("model-table").replaceChildren(...rows.map((r) => {
       const at50 = sweepAt(r.model, 0.5);
       const name = td("", modelLabel(r.model));
-      if (r.model === "XGBoost") name.appendChild(el("span", "tag", "explained below"));
+      if (r.model === "XGBoost") name.appendChild(el("span", "tag", "explained in 5.4"));
       const ci = el("div", "ci");
       ci.title = `${f3(r.roc_auc_ci_low)} to ${f3(r.roc_auc_ci_high)}`;
       const line = el("span", "line");
@@ -768,8 +775,8 @@ if (typeof module !== "undefined") {
     $("k-precision").textContent = flagged ? fmtP(r.tp / flagged) : "-";
     const story = $("cut-story");
     story.replaceChildren(
-      `At ${t.toFixed(2)}, XGBoost flags `, el("b", "", fmtN(flagged)), " of ", fmtN(N_TEST), " test customers. That reaches ",
-      el("b", "", fmtN(r.tp)), ` of the ${fmtN(left)} who left, and `, el("b", "", fmtN(r.fp)), " who stayed.");
+      `Cutoff ${t.toFixed(2)}: `, el("b", "", fmtN(flagged)), ` of ${fmtN(N_TEST)} holdout customers flagged, `,
+      el("b", "", fmtN(r.tp)), ` of the ${fmtN(left)} churners and `, el("b", "", fmtN(r.fp)), " who stayed.");
   }
 
   // ---------------------------------------------------------------- 5.4
@@ -783,7 +790,7 @@ if (typeof module !== "undefined") {
     }));
     const [a, b] = D.importance;
     const two = (a.mean_abs_shap + b.mean_abs_shap) / total;
-    $("importance-note").textContent = `The five largest of ${D.importance.length} variables. ${a.base_feature} and ${b.base_feature} together account for ${fmtP(two)} of the total. They show what the model uses, not why customers leave.`;
+    $("importance-note").textContent = `Five largest of ${D.importance.length} variables; the full ranking is in Appendix B. ${a.base_feature} and ${b.base_feature}: ${fmtP(two)} of the total. SHAP describes the fitted model, not causes of churn.`;
   }
 
   // ---------------------------------------------------------------- 5.5 one customer
@@ -810,7 +817,8 @@ if (typeof module !== "undefined") {
   }
   function buildExamples() {
     $("examples").replaceChildren(...cases.map((c) => {
-      const [title, sub] = CASE_LABEL[c.case] || [c.case, ""];
+      const title = CASE_LABEL[c.case] || c.case;
+      const sub = `${D.customers[c.pos].customerID} · score ${fmtP(D.proba.XGBoost[c.pos])}`;
       const b = el("button", "case");
       b.type = "button";
       b.dataset.pos = String(c.pos);
@@ -913,7 +921,7 @@ if (typeof module !== "undefined") {
     $("gauge-label").textContent = `cutoff ${cut}`;
     $("main-flag").textContent = `${flagged ? "Flagged" : "Not flagged"} at ${cut}`;
     $("main-flag").className = "chip " + (flagged ? "flag" : "noflag");
-    $("cust-truth").textContent = c.y_true ? "Left" : "Stayed";
+    $("cust-truth").textContent = c.y_true ? "Churn = Yes" : "Churn = No";
     $("edited-chip").hidden = !edited;
     $("lr-score").textContent = fmtP(s.lr);
     announce(`Customer ${c.customerID}${edited ? ", edited" : ""}: XGBoost ${fmtP(s.xgb)}, ${flagged ? "flagged" : "not flagged"} at ${cut}.`);
@@ -963,7 +971,7 @@ if (typeof module !== "undefined") {
       d.style.left = pos(v);
       track.appendChild(d);
     };
-    let [row, track] = wfRow("base", "Model baseline", fmtP(sigmoid(ev)));
+    let [row, track] = wfRow("base", "SHAP baseline", fmtP(sigmoid(ev)));
     dot(track, ev);
     rows.push(row);
     for (const st of steps) {
@@ -974,7 +982,7 @@ if (typeof module !== "undefined") {
       track.appendChild(seg);
       rows.push(row);
     }
-    [row, track] = wfRow("end", "This customer", fmtP(s.xgb));
+    [row, track] = wfRow("end", "Score", fmtP(s.xgb));
     dot(track, cum);
     row.dataset.logit = String(cum);
     rows.push(row);
@@ -991,7 +999,7 @@ if (typeof module !== "undefined") {
     const pick = top.find(([f]) => L.ui.hypothesis_for[f]);
     const h = pick && L.ui.hypotheses[L.ui.hypothesis_for[pick[0]]];
     $("hypothesis").replaceChildren(...(h
-      ? [["Signal", h.signal], ["Possible reading", h.interpretation], ["Or else", h.alternative], ["What to test", h.test]].flatMap(([k, v]) => [el("dt", "", k), el("dd", "", v)])
+      ? [["Observed signal", h.signal], ["Possible interpretation", h.interpretation], ["Alternative explanation", h.alternative], ["What a platform could test", h.test]].flatMap(([k, v]) => [el("dt", "", k), el("dd", "", v)])
       : [el("dt", "", "Table 6"), el("dd", "", "None of the largest contributions has a row in Table 6.")]));
   }
   function renderCustomer() {
