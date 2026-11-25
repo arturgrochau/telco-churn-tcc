@@ -5,190 +5,146 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Churn signals and communication hypotheses</title>
 <style>
-  :root { --ink: #1c2430; --muted: #515e70; --line: #d9dee5; --paper: #f4f6f9; --card: #fff; --accent: #24458c; --churn: #ae2d29; --stay: #17663b; --amber: #b7791f; --soft: #edf2fb; }
+  :root { --ink: #1c2430; --muted: #5a6677; --line: #dfe3e9; --paper: #f4f6f9; --card: #fff; --accent: #24458c; --churn: #ae2d29; --stay: #17663b; --amber: #b7791f; --soft: #eef2f9; --edit: #fff3d6; }
   * { box-sizing: border-box; }
   [hidden] { display: none !important; }
   .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
-  body { max-width: 1180px; margin: auto; font: 16px/1.5 Arial, Helvetica, sans-serif; color: var(--ink); background: var(--paper); padding: 0 28px 32px; }
-  header { padding: 24px 0 12px; }
-  h1 { font-size: 30px; margin: 0 0 4px; letter-spacing: -0.01em; }
-  h2 { font-size: 22px; margin: 0 0 10px; display: flex; align-items: center; gap: 12px; }
-  h3 { font-size: 17px; margin: 0 0 8px; color: var(--accent); }
-  p { margin: 8px 0 12px; }
-  .sub { color: var(--muted); font-size: 17px; margin: 0; max-width: 900px; }
-  .panel { background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 20px 24px; margin-bottom: 16px; }
-  .num { display: inline-flex; align-items: center; justify-content: center; width: 32px; height: 32px; border-radius: 50%; background: var(--accent); color: #fff; font-size: 17px; flex: none; }
-  .lead { max-width: 900px; }
+  body { max-width: 1300px; margin: auto; font: 15px/1.5 Arial, Helvetica, sans-serif; color: var(--ink); background: var(--paper); padding: 0 28px 32px; }
+  header { padding: 22px 0 10px; }
+  h1 { font-size: 26px; margin: 0 0 4px; }
+  h2 { font-size: 19px; margin: 0; }
+  h3 { font-size: 14px; margin: 0 0 8px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.04em; }
+  p { margin: 6px 0; }
+  .sub { color: var(--muted); margin: 0; }
+  .panel { background: var(--card); border: 1px solid var(--line); border-radius: 8px; padding: 18px 22px; margin-bottom: 14px; }
+  .bar-head { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 10px; }
+  .gap { margin-top: 16px; }
   .table-wrap { overflow-x: auto; }
-  table { border-collapse: collapse; width: 100%; font-size: 15px; }
-  td, th { padding: 8px 10px; border-bottom: 1px solid var(--line); text-align: left; vertical-align: top; }
-  th { color: var(--muted); font-weight: 600; font-size: 13px; }
+  table.df { border-collapse: collapse; font-size: 13px; font-variant-numeric: tabular-nums; }
+  .df th, .df td { padding: 5px 10px; border-bottom: 1px solid var(--line); text-align: right; white-space: nowrap; }
+  .df th { font-weight: 700; border-bottom: 1px solid #b9c1cc; }
+  .df td.t, .df th.t { text-align: left; }
+  .df tbody tr:nth-child(even) { background: #f8f9fb; }
+  .df .idx { color: var(--muted); font-weight: 700; text-align: left; }
   #data-rows tr { cursor: pointer; }
-  #data-rows tr:hover { background: #f6f8fb; }
-  #data-rows tr.selected { background: var(--soft); box-shadow: inset 4px 0 0 var(--accent); }
-  .pick { font: inherit; font-weight: 600; color: var(--accent); background: none; border: 0; padding: 0; cursor: pointer; text-decoration: underline; }
-  .controls { display: flex; flex-wrap: wrap; gap: 10px 16px; align-items: center; margin: 14px 0 4px; }
-  button { font: inherit; font-size: 14px; padding: 7px 12px; border: 1px solid var(--line); border-radius: 5px; background: #edf1f7; cursor: pointer; color: var(--ink); }
+  #data-rows tr.selected { background: var(--soft); box-shadow: inset 3px 0 0 var(--accent); cursor: default; }
+  .pick { font: inherit; font-weight: 700; color: var(--accent); background: none; border: 0; padding: 0; cursor: pointer; }
+  .df input, .df select { font: inherit; font-size: 13px; padding: 2px 4px; border: 1px solid #b9c1cc; border-radius: 4px; background: #fff; }
+  .df input[type=text] { width: 72px; text-align: right; }
+  #enc-head th { white-space: normal; vertical-align: bottom; font-size: 12px; max-width: 104px; }
+  #enc-head th, #enc-row td { padding: 5px 5px; }
+  .df [aria-invalid="true"] { border: 2px solid var(--churn); }
+  .df td.edited, .df td.edited input, .df td.edited select { background: var(--edit); }
+  .caption { font-size: 12.5px; color: var(--muted); margin: 6px 0 0; }
+  button { font: inherit; font-size: 13px; padding: 5px 11px; border: 1px solid var(--line); border-radius: 5px; background: #edf1f7; cursor: pointer; color: var(--ink); }
   button:hover { background: #dde5f2; }
   button[aria-pressed="true"] { background: var(--accent); color: #fff; border-color: var(--accent); }
-  :focus-visible { outline: 3px solid #526fc4; outline-offset: 3px; }
-  .edit label { display: flex; align-items: center; gap: 8px; font-size: 15px; }
-  .edit select { font: inherit; font-size: 15px; padding: 5px 8px; border: 1px solid var(--line); border-radius: 5px; background: #fff; }
-  .edit input[type=range] { width: 150px; }
-  .edit output { min-width: 56px; font-weight: 600; }
-  .prep-val { font-family: ui-monospace, Menlo, monospace; font-size: 14px; }
-  .prep-val .on { font-weight: 700; color: var(--accent); }
-  .prep-val .off { color: var(--muted); }
-  .edited { background: #fff6df; }
-  .tag { font-size: 12px; color: var(--amber); font-weight: 600; margin-left: 6px; }
-  .story-grid { display: grid; grid-template-columns: 0.85fr 1.1fr 1.25fr; gap: 30px; margin-top: 8px; }
-  .score { font-size: 56px; font-weight: 700; line-height: 1.12; color: var(--accent); margin: 4px 0 8px; }
-  .score-label { font-size: 15px; color: var(--muted); margin: 4px 0; }
-  .badge { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 14px; font-weight: 600; color: #fff; }
+  :focus-visible { outline: 3px solid #526fc4; outline-offset: 2px; }
+  .controls { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+  .note { background: var(--edit); border: 1px solid #e2cd94; border-radius: 6px; padding: 7px 12px; font-size: 13px; margin: 10px 0 0; display: flex; flex-wrap: wrap; align-items: center; gap: 8px 14px; }
+  .story-grid { display: grid; grid-template-columns: 0.9fr 1fr 1.3fr; gap: 28px; margin-top: 12px; }
+  .score { font-size: 48px; font-weight: 700; line-height: 1.1; color: var(--accent); }
+  .badges { margin: 6px 0 12px; display: flex; flex-wrap: wrap; gap: 6px; }
+  .badge { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 13px; font-weight: 600; color: #fff; }
   .badge.churn { background: var(--churn); } .badge.stay { background: var(--stay); } .badge.neutral { background: #5d6878; }
-  .models { margin-top: 18px; font-size: 14px; }
-  .mrow { display: grid; grid-template-columns: 130px 1fr 52px; gap: 8px; align-items: center; margin: 4px 0; }
-  .mbar { height: 10px; background: #e7ebf1; border-radius: 5px; overflow: hidden; }
-  .mbar span { display: block; height: 100%; background: #8796ad; }
-  .mrow.main .mbar span { background: var(--accent); }
-  .mrow .pct { text-align: right; font-variant-numeric: tabular-nums; }
-  .signals { list-style: none; padding: 0; margin: 4px 0; }
-  .signals li { padding: 9px 0; border-bottom: 1px solid var(--line); }
-  .signals strong, .signals span { display: block; }
-  .signals .up { color: var(--churn); font-size: 14px; } .signals .down { color: var(--stay); font-size: 14px; }
-  .hypothesis { background: var(--soft); border-radius: 8px; padding: 15px 18px; }
-  .hypothesis dl { margin: 0; }
-  .hypothesis dt { font-size: 13px; font-weight: 600; color: var(--muted); margin-top: 8px; }
-  .hypothesis dd { margin: 2px 0 0; }
-  .caption { font-size: 13px; color: var(--muted); margin: 8px 0 0; }
-  summary { font-weight: 600; cursor: pointer; padding: 4px 0; }
-  details.more { margin-top: 14px; }
-  .slider { display: grid; grid-template-columns: 70px 1fr 60px; gap: 14px; align-items: center; margin: 12px 0; max-width: 700px; }
-  .slider output { font-size: 20px; font-weight: 700; }
+  .df.full { width: 100%; }
+  .pos { color: var(--churn); font-weight: 700; } .neg { color: var(--stay); font-weight: 700; }
+  .hypothesis { background: var(--soft); border-radius: 8px; padding: 14px 16px; }
+  .hyp { border-collapse: collapse; font-size: 13.5px; }
+  .hyp th { text-align: left; vertical-align: top; color: var(--muted); font-weight: 600; padding: 4px 12px 4px 0; white-space: nowrap; }
+  .hyp td { padding: 4px 0; }
+  summary { font-weight: 600; cursor: pointer; font-size: 13.5px; }
+  details.more { margin-top: 10px; }
+  .slider { display: grid; grid-template-columns: 1fr auto auto; gap: 14px; align-items: center; max-width: 760px; }
+  .slider output { font-size: 20px; font-weight: 700; min-width: 48px; }
   input[type=range] { width: 100%; }
-  .people { display: flex; height: 34px; border-radius: 6px; overflow: hidden; margin: 18px 0 8px; border: 1px solid var(--line); }
+  .people { display: flex; height: 28px; border-radius: 5px; overflow: hidden; margin: 16px 0 6px; border: 1px solid var(--line); }
   .people span { display: block; height: 100%; }
   .seg-tp { background: var(--churn); } .seg-fp { background: var(--amber); } .seg-fn { background: #f1c9c7; } .seg-tn { background: #e7ebf1; }
-  .legend { display: flex; flex-wrap: wrap; gap: 6px 18px; font-size: 13px; color: var(--muted); }
-  .legend i { display: inline-block; width: 12px; height: 12px; border-radius: 2px; margin-right: 6px; vertical-align: -1px; }
-  .kv { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 16px; margin: 16px 0 8px; }
-  .kv span { display: block; font-size: 13px; color: var(--muted); }
-  .big { font-size: 30px; font-weight: 700; font-variant-numeric: tabular-nums; }
-  .note { background: #fff6df; border: 1px solid #d9c695; border-radius: 6px; padding: 10px 14px; font-size: 14px; margin: 12px 0; }
-  .gloss { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 8px 20px; font-size: 14px; color: var(--muted); margin-top: 12px; }
-  .gloss b { color: var(--ink); }
-  #about p { font-size: 14px; color: var(--muted); }
-  .chart text { font-size: 12px; fill: var(--ink); } .chart .tick, .chart .axlbl { fill: var(--muted); font-size: 11px; }
+  .legend { display: flex; flex-wrap: wrap; gap: 4px 16px; font-size: 12.5px; color: var(--muted); }
+  .legend i { display: inline-block; width: 11px; height: 11px; border-radius: 2px; margin-right: 5px; vertical-align: -1px; }
+  .counts { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; margin: 14px 0 4px; }
+  .counts span { display: block; font-size: 12.5px; color: var(--muted); }
+  .big { font-size: 26px; font-weight: 700; font-variant-numeric: tabular-nums; }
+  #about p { font-size: 13px; color: var(--muted); }
+  .chart text { font-size: 12px; fill: var(--ink); } .chart .axlbl { fill: var(--muted); font-size: 11px; }
   .chart .axis { stroke: #9aa3ad; stroke-width: 1; }
   .bar.up rect { fill: var(--churn); } .bar.down rect { fill: var(--stay); } .bar .val { font-size: 11px; fill: var(--muted); }
-  footer { color: var(--muted); font-size: 13px; margin-top: 18px; }
-  body.presentation { max-width: none; padding: 12px; font-size: 23px; background: white; }
-  .presentation header, .presentation .step:not(#panel-customer), .presentation #about, .presentation footer, .presentation details.more { display: none; }
-  .presentation #panel-customer { border: 0; padding: 20px 24px; }
-  .presentation .story-grid { grid-template-columns: 0.8fr 0.9fr 1.6fr; }
-  .presentation #hyp-basis, .presentation #probs-caption { display: none; }
-  .presentation h2 { font-size: 30px; margin-bottom: 22px; }
-  .presentation .num { width: 40px; height: 40px; font-size: 22px; }
-  .presentation h3 { font-size: 24px; }
-  .presentation .score { font-size: 68px; }
-  .presentation .score-label, .presentation .models { font-size: 19px; }
-  .presentation .mrow { grid-template-columns: 190px 1fr 74px; }
-  .presentation .signals strong { font-size: 23px; }
-  .presentation .signals .up, .presentation .signals .down { font-size: 18px; }
-  .presentation .hypothesis dt { font-size: 17px; }
-  .presentation .hypothesis dd { font-size: 18px; }
-  .presentation .caption { font-size: 17px; }
-  .presentation .badge { font-size: 18px; }
-  @media (max-width: 900px) { .story-grid { grid-template-columns: 1fr; gap: 22px; } .score { font-size: 44px; } }
-  @media (max-width: 600px) { body { padding: 0 14px 24px; } .panel { padding: 18px; } .slider { grid-template-columns: 1fr; } h1 { font-size: 25px; } h2 { font-size: 19px; } .edit label { flex-wrap: wrap; } }
+  footer { color: var(--muted); font-size: 12.5px; margin-top: 16px; }
+  body.presentation { max-width: none; padding: 10px; font-size: 21px; background: white; }
+  .presentation header, .presentation #step-data, .presentation #panel-threshold, .presentation #about, .presentation footer, .presentation details.more { display: none; }
+  .presentation #panel-customer { border: 0; padding: 18px 22px; }
+  .presentation h2 { font-size: 28px; }
+  .presentation h3 { font-size: 17px; }
+  .presentation .score { font-size: 64px; }
+  .presentation .badge { font-size: 17px; }
+  .presentation .df { font-size: 17px; }
+  .presentation .hyp { font-size: 17px; }
+  .presentation .caption { font-size: 15px; }
+  @media (max-width: 900px) { .story-grid { grid-template-columns: 1fr; gap: 22px; } }
+  @media (max-width: 600px) { body { padding: 0 12px 24px; } .panel { padding: 16px; } h1 { font-size: 22px; } .slider { grid-template-columns: 1fr auto; } .slider .controls { grid-column: 1 / -1; } .hyp th { white-space: normal; } }
 </style>
 </head>
 <body>
 <header>
   <h1>Churn signals and communication hypotheses</h1>
-  <p class="sub">An interactive companion to the TCC. The data is IBM's Telco sample of a fictional operator, and its label records whether a customer left in the last month, so the scores describe recorded departures, not a forecast.</p>
+  <p class="sub">IBM Telco Customer Churn sample (fictional operator). Churn records a departure in the last month; the scores are not a forecast.</p>
 </header>
 <main>
-<section class="panel step" id="step-data" aria-labelledby="data-title">
-  <h2 id="data-title"><span class="num">1</span><span>The data</span></h2>
-  <p class="lead">Each row is one customer. The full table has 7,043 customers and 21 columns, and the models learn from 19 of them. These rows come from the 1,409 test customers, whom the models did not see while learning. Click a row to follow that customer.</p>
-  <div class="table-wrap"><table>
-    <thead><tr><th>Customer</th><th>Months as customer</th><th>Contract</th><th>Internet service</th><th>Monthly charges (USD)</th><th>Payment method</th><th>Left in the last month</th></tr></thead>
+<section class="panel" id="step-data" aria-labelledby="data-title">
+  <div class="bar-head"><h2 id="data-title">Data</h2><div class="controls"><button id="btn-more">Other customers</button><button id="btn-start">Reset</button></div></div>
+  <div class="table-wrap"><table class="df">
+    <thead><tr><th class="t"></th><th class="t">customerID</th><th>tenure</th><th class="t">Contract</th><th class="t">InternetService</th><th>MonthlyCharges</th><th>TotalCharges</th><th class="t">PaymentMethod</th><th class="t">Churn</th></tr></thead>
     <tbody id="data-rows"></tbody>
   </table></div>
-  <div class="controls"><button id="btn-more">Show five other customers</button><button id="btn-start">Back to the start</button></div>
+  <p class="caption">5 of the 1,409 test customers. The dataset has 7,043 customers and 21 columns, of which 19 are used by the models. The selected row can be edited.</p>
+  <h3 class="gap">Encoded input</h3>
+  <div class="table-wrap"><table class="df"><thead id="enc-head"></thead><tbody id="enc-row"></tbody></table></div>
+  <p class="caption">13 of the 46 model columns. Categories are one-hot encoded; numbers are standardized with the training mean and standard deviation.</p>
+  <div id="ed-status" class="note" role="status" hidden><span>Edited row: the scores show how the models respond, not the effect of a real change. TotalCharges follows tenure × MonthlyCharges; only XGBoost and logistic regression are rescored.</span><button id="ed-reset">Restore recorded values</button></div>
 </section>
 
-<section class="panel step" id="step-prep" aria-labelledby="prep-title">
-  <h2 id="prep-title"><span class="num">2</span><span>How the model reads customer <span class="cid"></span></span></h2>
-  <p class="lead">A model only reads numbers. Each category becomes a set of yes/no columns (1 or 0), and each amount is rescaled against the 5,634 training customers, so 0 means average and 1 means one standard deviation above it. Each customer becomes 46 numbers.</p>
-  <div class="controls edit" aria-label="Change a detail">
-    <span class="muted">Change a detail:</span>
-    <label>Contract <select id="ed-contract"></select></label>
-    <label for="ed-tenure">Months as customer <input type="range" id="ed-tenure" min="0" max="72" step="1"><output id="ed-tenure-v" for="ed-tenure"></output></label>
-    <label for="ed-monthly">Monthly charges <input type="range" id="ed-monthly" min="18" max="120" step="0.05"><output id="ed-monthly-v" for="ed-monthly"></output></label>
-    <button id="ed-reset">Recorded values</button>
-  </div>
-  <p id="ed-status" class="note" role="status" hidden>Edited details. The scores below show how the models respond, not what a real change would cause. Total charges follow months × monthly charges.</p>
-  <div class="table-wrap"><table>
-    <thead><tr><th>Detail</th><th>Value</th><th>What the model receives</th></tr></thead>
-    <tbody id="prep-main"></tbody>
-  </table></div>
-  <details class="more"><summary>All 19 details</summary>
-    <div class="table-wrap"><table><thead><tr><th>Detail</th><th>Value</th><th>What the model receives</th></tr></thead><tbody id="prep-all"></tbody></table></div>
-  </details>
-</section>
-
-<section class="panel step" id="panel-customer" aria-labelledby="case-title">
-  <h2 id="case-title"><span class="num">3</span><span>What the model says about customer <span id="cust-id"></span></span></h2>
+<section class="panel" id="panel-customer" aria-labelledby="case-title">
+  <h2 id="case-title">Prediction for <span id="cust-id"></span></h2>
   <p id="live" class="sr-only" aria-live="polite"></p>
   <div class="story-grid">
     <div>
-      <h3>Churn score</h3>
-      <div class="score-label">XGBoost</div>
+      <h3>XGBoost score</h3>
       <div class="score" id="main-score"></div>
-      <p class="score-label"><span id="main-flag" class="badge"></span></p>
-      <p class="score-label">Recorded outcome: <span id="cust-truth" class="badge"></span></p>
-      <div class="models" id="cust-probs"></div>
-      <p class="caption" id="probs-caption"></p>
+      <div class="badges"><span id="main-flag" class="badge neutral"></span><span id="cust-truth" class="badge"></span></div>
+      <table class="df full"><thead><tr><th class="t">Model</th><th>Score</th><th>ROC-AUC</th></tr></thead><tbody id="cust-probs"></tbody></table>
     </div>
     <div>
-      <h3>What pushed the score</h3>
-      <ul id="main-signals" class="signals"></ul>
-      <p class="caption">SHAP attributes the model's score to inputs. It does not establish why churn was recorded.</p>
+      <h3>Largest SHAP contributions</h3>
+      <table class="df full"><tbody id="main-signals"></tbody></table>
+      <p class="caption">Contributions to this score in log-odds. They describe the model, not why the customer left.</p>
+      <details class="more"><summary>All 19 variables</summary><div id="cust-shap"></div><p class="caption" id="cust-shap-caption"></p></details>
     </div>
     <div class="hypothesis">
-      <h3>A communication hypothesis</h3>
-      <p id="hyp-basis" class="score-label"></p>
-      <dl id="hypothesis"></dl>
-      <p class="caption">The author's proposal for a platform study (TCC, Table 6). The Telco data does not measure it, and no message was tested.</p>
+      <h3>Hypothesis (TCC, Table 6)</h3>
+      <table class="hyp"><tbody id="hypothesis"></tbody></table>
+      <p class="caption">The author's proposal for a platform study; not measured in this data.</p>
     </div>
   </div>
-  <details class="more"><summary>Contributions of all 19 details</summary><div id="cust-shap"></div><p class="caption" id="cust-shap-caption"></p></details>
 </section>
 
-<section class="panel step" id="panel-threshold" aria-labelledby="threshold-title">
-  <h2 id="threshold-title"><span class="num">4</span><span>Who gets flagged?</span></h2>
-  <p class="lead">A team that uses the score has to choose a cutoff: customers scoring above it are flagged for attention. Move it to see what XGBoost would flag among the 1,409 test customers, <span id="n-left"></span> of whom left.</p>
-  <div class="slider"><label for="thr">Cutoff</label><input type="range" id="thr" min="0.05" max="0.95" step="0.01" value="0.5"><output id="thr-value" for="thr">0.50</output></div>
-  <div class="controls"><span class="muted">Cutoffs discussed in the TCC (Section 5.3):</span><button data-cut="0.50">0.50</button><button data-cut="0.35">0.35</button><button data-cut="0.07">0.07</button></div>
+<section class="panel" id="panel-threshold" aria-labelledby="threshold-title">
+  <h2 id="threshold-title">Cutoff</h2>
+  <div class="slider gap"><input type="range" id="thr" min="0.05" max="0.95" step="0.01" value="0.5" aria-label="Cutoff"><output id="thr-value" for="thr">0.50</output><div class="controls"><button data-cut="0.50">0.50</button><button data-cut="0.35">0.35</button><button data-cut="0.07">0.07</button></div></div>
   <div class="people" id="people-bar" aria-hidden="true"></div>
   <div class="legend"><span><i class="seg-tp"></i>Left, flagged</span><span><i class="seg-fp"></i>Stayed, flagged</span><span><i class="seg-fn"></i>Left, missed</span><span><i class="seg-tn"></i>Stayed, not flagged</span></div>
-  <div class="kv">
-    <div><span>Customers flagged</span><div class="big" id="k-flagged"></div></div>
-    <div><span>Of them, left</span><div class="big" id="k-tp"></div><span id="k-recall"></span></div>
-    <div><span>Of them, stayed</span><div class="big" id="k-fp"></div></div>
-    <div><span>Left but not flagged</span><div class="big" id="k-fn"></div></div>
+  <div class="counts">
+    <div><span>Flagged</span><div class="big" id="k-flagged"></div></div>
+    <div><span>Left, flagged</span><div class="big" id="k-tp"></div><span id="k-recall"></span></div>
+    <div><span>Stayed, flagged</span><div class="big" id="k-fp"></div></div>
+    <div><span>Left, missed</span><div class="big" id="k-fn"></div></div>
   </div>
-  <p id="thr-customer"></p>
-  <p class="caption">Lower cutoffs find more of the customers who left and also flag many more who stayed. No campaign or retention effect was measured, and these cutoffs were examined on the same test customers, so they show a trade-off rather than recommend a setting.</p>
+  <p class="caption">XGBoost on the 1,409 test customers, <span id="n-left"></span> of whom left. Customers scoring at or above the cutoff are flagged. The presets are the cutoffs in TCC Section 5.3, examined on this same holdout; no campaign effect was measured.</p>
 </section>
 
 <details class="panel" id="about">
-  <summary>About this page</summary>
-  <p>IBM describes the data as a sample from a fictional telecommunications company, and how its records were built is not documented. The TCC therefore treats it as a benchmark. Communication applications on this page are hypotheses for a platform to test.</p>
-  <p>Scores and explanations come from the notebook. The page also recomputes the XGBoost and logistic regression scores and the XGBoost SHAP values in the browser. <span id="selfcheck" role="status"></span></p>
-  <div class="gloss" id="gloss"></div>
+  <summary>About</summary>
+  <p>IBM describes the data as a sample from a fictional telecommunications company, and how its records were built is not documented. Scores and SHAP values come from the notebook. The browser also recalculates the XGBoost and logistic regression scores and the XGBoost SHAP values and checks them against the notebook. <span id="selfcheck" role="status"></span></p>
 </details>
 </main>
 <footer>Artur Pedrotti Grochau, FGV ECMI, 2026. Offline demonstration based on notebook exports.</footer>
@@ -523,8 +479,8 @@ if (typeof module !== "undefined") {
 }
 
 
-// ui.js -- one customer, four steps: the data, what the model receives, the score and
-// its signals, and who gets flagged at a cutoff. Built from notebook exports.
+// ui.js -- five test customers with an editable selected row, that row's encoded input,
+// the prediction and the cutoff counts. Built from notebook exports.
 
 (function () {
   const D = DATA;
@@ -532,7 +488,9 @@ if (typeof module !== "undefined") {
   const N_TEST = D.customers.length;
   const featureNames = D.pre.feature_names;
   const MODEL_LABEL = { "Logistic Regression": "Logistic regression", "Random Forest": "Random forest" };
-  const MAIN_DETAILS = ["tenure", "MonthlyCharges", "TotalCharges", "Contract"];
+  const RAW = ["tenure", "Contract", "InternetService", "MonthlyCharges", "TotalCharges", "PaymentMethod"];
+  const EDITORS = { tenure: "ed-tenure", Contract: "ed-contract", MonthlyCharges: "ed-monthly", PaymentMethod: "ed-payment" };
+  const ENC = RAW.flatMap((f) => featureNames.map((n, i) => [n, i]).filter(([n]) => n === f || n.startsWith(f + "_")));
   const $ = (id) => document.getElementById(id);
   const fmtP = (p) => (100 * p).toFixed(1) + "%";
   const caseRows = D.cases.map((c) => D.customers.findIndex((k) => k.row === c.index)).filter((i) => i >= 0);
@@ -540,15 +498,9 @@ if (typeof module !== "undefined") {
   const examplePos = Math.max(0, D.customers.findIndex((c) => c.row === exampleCase.index));
   const state = { pos: examplePos, rows: caseRows.slice(), edits: null, autoTotal: false, cutoff: 0.5, shapJsOk: false };
 
-  // Start index of each detail among the 46 model inputs (one-hot columns first, then numbers).
-  const offsets = {};
-  let k = 0;
-  for (const c of D.pre.categorical) { offsets[c.name] = k; k += c.categories.length; }
-  for (const n of D.pre.numeric) { offsets[n.name] = k; k += 1; }
-
   // ---------------------------------------------------------------- helpers
   const modelLabel = (m) => MODEL_LABEL[m] || m;
-  const label = (f) => (L.features[f] || {}).label || f;
+  const isNum = (f) => D.pre.numeric.some((n) => n.name === f);
   function fmtVal(f, v) {
     if (f === "tenure") return String(Math.round(Number(v)));
     if (f === "MonthlyCharges" || f === "TotalCharges") return Number(v).toFixed(2);
@@ -570,61 +522,93 @@ if (typeof module !== "undefined") {
     for (const r of D.sweeps.XGBoost) if (Math.abs(r.threshold - t) < Math.abs(best.threshold - t)) best = r;
     return best;
   }
+  function cell(cls, text) {
+    const td = document.createElement("td");
+    if (cls) td.className = cls;
+    if (text !== undefined) td.textContent = text;
+    return td;
+  }
 
-  // ---------------------------------------------------------------- 1 the data
-  function renderData() {
+  // ---------------------------------------------------------------- data
+  function editor(f, value) {
+    let el;
+    if (isNum(f)) {
+      const meta = L.features[f];
+      // Text, not type=number, so the browser locale cannot turn 95.10 into 95,10.
+      el = document.createElement("input");
+      Object.assign(el, { type: "text", inputMode: f === "tenure" ? "numeric" : "decimal", value: fmtVal(f, value) });
+      el.addEventListener("input", () => {
+        const n = Number(el.value.trim().replace(",", "."));
+        const steps = (n - meta.min) / meta.step;
+        const ok = el.value.trim() !== "" && Number.isFinite(n) && n >= meta.min && n <= meta.max && Math.abs(steps - Math.round(steps)) < 1e-6;
+        el.setAttribute("aria-invalid", String(!ok));
+        if (ok) setEdit({ [f]: n }, true);
+      });
+    } else {
+      el = document.createElement("select");
+      for (const cat of D.pre.categorical.find((c) => c.name === f).categories) {
+        const o = document.createElement("option");
+        o.value = cat; o.textContent = cat;
+        el.appendChild(o);
+      }
+      el.value = value;
+      el.addEventListener("change", () => setEdit({ [f]: el.value }, false));
+    }
+    el.id = EDITORS[f];
+    el.setAttribute("aria-label", f);
+    return el;
+  }
+  function buildData() {
     const body = $("data-rows");
     body.replaceChildren();
     for (const pos of state.rows) {
       const c = D.customers[pos];
+      const selected = pos === state.pos;
       const tr = document.createElement("tr");
-      tr.className = pos === state.pos ? "selected" : "";
+      if (selected) tr.className = "selected";
+      const idx = cell("idx");
       const pick = document.createElement("button");
       pick.className = "pick";
-      pick.textContent = c.customerID;
-      pick.setAttribute("aria-pressed", String(pos === state.pos));
-      const first = document.createElement("td");
-      first.appendChild(pick);
-      tr.appendChild(first);
-      for (const text of [fmtVal("tenure", c.x.tenure), c.x.Contract, c.x.InternetService, fmtVal("MonthlyCharges", c.x.MonthlyCharges), c.x.PaymentMethod, c.y_true ? "Yes" : "No"]) {
-        const td = document.createElement("td");
-        td.textContent = text;
+      pick.textContent = c.row;
+      pick.setAttribute("aria-pressed", String(selected));
+      pick.setAttribute("aria-label", `Select customer ${c.customerID}`);
+      idx.appendChild(pick);
+      tr.append(idx, cell("t", c.customerID));
+      for (const f of RAW) {
+        const td = cell(isNum(f) ? "" : "t");
+        td.dataset.col = f;
+        if (selected && EDITORS[f]) td.appendChild(editor(f, c.x[f]));
+        else td.textContent = fmtVal(f, c.x[f]);
         tr.appendChild(td);
       }
-      tr.addEventListener("click", () => { select(pos); $("data-rows").querySelector('button[aria-pressed="true"]').focus(); });
+      tr.appendChild(cell("t", c.y_true ? "Yes" : "No"));
+      if (!selected) tr.addEventListener("click", () => { select(pos); body.querySelector('button[aria-pressed="true"]').focus(); });
       body.appendChild(tr);
     }
   }
-
-  // ---------------------------------------------------------------- 2 what the model receives
-  function receives(f, v) {
-    const n = D.pre.numeric.find((s) => s.name === f);
-    if (n) {
-      const z = v[offsets[f]];
-      return `<span class="on">${z >= 0 ? "+" : "−"}${Math.abs(z).toFixed(2)}</span>`;
+  function refreshRow() {
+    const x = currentX(), rec = recorded();
+    for (const td of $("data-rows").querySelectorAll("tr.selected td[data-col]")) {
+      const f = td.dataset.col;
+      td.classList.toggle("edited", String(x[f]) !== String(rec[f]));
+      if (!EDITORS[f]) td.textContent = fmtVal(f, x[f]);
     }
-    const cats = D.pre.categorical.find((c) => c.name === f).categories;
-    return cats.map((cat, i) => `<span class="${v[offsets[f] + i] ? "on" : "off"}">${cat}: ${v[offsets[f] + i]}</span>`).join(" · ");
-  }
-  function prepRow(f, x, v) {
-    const tr = document.createElement("tr");
-    const changed = state.edits && String(x[f]) !== String(recorded()[f]);
-    if (changed) tr.className = "edited";
-    tr.innerHTML = `<td>${label(f)}</td><td><b>${fmtVal(f, x[f])}</b>${changed ? `<span class="tag">edited, was ${fmtVal(f, recorded()[f])}</span>` : ""}</td><td class="prep-val">${receives(f, v)}</td>`;
-    return tr;
-  }
-  function renderPrep() {
-    const x = currentX();
-    const v = preprocessRow(D.pre, x);
-    for (const el of document.querySelectorAll(".cid")) el.textContent = D.customers[state.pos].customerID;
-    $("ed-contract").value = x.Contract;
-    $("ed-tenure").value = x.tenure;
-    $("ed-tenure-v").textContent = fmtVal("tenure", x.tenure);
-    $("ed-monthly").value = x.MonthlyCharges;
-    $("ed-monthly-v").textContent = fmtVal("MonthlyCharges", x.MonthlyCharges);
     $("ed-status").hidden = !state.edits;
-    $("prep-main").replaceChildren(...MAIN_DETAILS.map((f) => prepRow(f, x, v)));
-    $("prep-all").replaceChildren(...D.base_features.map((f) => prepRow(f, x, v)));
+  }
+  function renderEncoded() {
+    if (!$("enc-head").children.length) {
+      const tr = document.createElement("tr");
+      for (const [name] of ENC) { const th = document.createElement("th"); th.innerHTML = name.replace("_", "_<wbr>"); tr.appendChild(th); }
+      $("enc-head").appendChild(tr);
+    }
+    const v = preprocessRow(D.pre, currentX());
+    const v0 = preprocessRow(D.pre, recorded());
+    const tr = document.createElement("tr");
+    for (const [name, i] of ENC) {
+      const td = cell(v[i] !== v0[i] ? "edited" : "", D.pre.numeric.some((n) => n.name === name) ? v[i].toFixed(2) : String(v[i]));
+      tr.appendChild(td);
+    }
+    $("enc-row").replaceChildren(tr);
   }
   function setEdit(patch, recomputeTotal) {
     if (recomputeTotal) state.autoTotal = true;
@@ -638,10 +622,10 @@ if (typeof module !== "undefined") {
     const same = Object.keys(e).every((f) => String(e[f]) === String(recorded()[f]));
     state.edits = same ? null : e;
     if (same) state.autoTotal = false;
-    renderCustomer();
+    update();
   }
 
-  // ---------------------------------------------------------------- 3 score, signals, hypothesis
+  // ---------------------------------------------------------------- prediction
   function renderScore() {
     const c = D.customers[state.pos];
     const x = currentX();
@@ -649,53 +633,45 @@ if (typeof module !== "undefined") {
     $("cust-id").textContent = c.customerID + (state.edits ? " (edited)" : "");
     $("main-score").textContent = fmtP(s.xgb);
     const flagged = s.xgb >= state.cutoff;
-    $("main-flag").textContent = `${flagged ? "Flagged" : "Not flagged"} at the ${state.cutoff.toFixed(2)} cutoff`;
-    $("main-flag").className = "badge neutral";
-    $("live").textContent = `Customer ${c.customerID}${state.edits ? ", edited" : ""}: XGBoost score ${fmtP(s.xgb)}, ${flagged ? "flagged" : "not flagged"} at the ${state.cutoff.toFixed(2)} cutoff.`;
-    $("cust-truth").textContent = c.y_true ? "Left" : "Stayed";
+    $("main-flag").textContent = `${flagged ? "Flagged" : "Not flagged"} at ${state.cutoff.toFixed(2)}`;
+    $("cust-truth").textContent = `Churn: ${c.y_true ? "Yes" : "No"}`;
     $("cust-truth").className = "badge " + (c.y_true ? "churn" : "stay");
+    $("live").textContent = `Customer ${c.customerID}${state.edits ? ", edited" : ""}: XGBoost score ${fmtP(s.xgb)}, ${flagged ? "flagged" : "not flagged"} at ${state.cutoff.toFixed(2)}.`;
 
-    const order = D.metrics.slice().sort((a, b) => b.roc_auc - a.roc_auc).map((r) => r.model);
-    const rows = state.edits
-      ? [["XGBoost", s.xgb], ["Logistic Regression", s.lr]]
-      : order.map((m) => [m, D.proba[m][state.pos]]);
-    $("cust-probs").innerHTML = rows.map(([m, p]) =>
-      `<div class="mrow${m === "XGBoost" ? " main" : ""}"><span>${modelLabel(m)}</span><div class="mbar"><span style="width:${(100 * p).toFixed(1)}%"></span></div><span class="pct">${(100 * p).toFixed(0)}%</span></div>`).join("");
-    const aucs = D.metrics.map((r) => Number(r.roc_auc));
-    $("probs-caption").textContent = state.edits
-      ? "With edited details, only XGBoost and logistic regression can be rescored in the browser."
-      : `The five models' scores for this customer. Across all ${N_TEST.toLocaleString("en-US")} test customers, their ROC-AUC ranges from ${Math.min(...aucs).toFixed(3)} to ${Math.max(...aucs).toFixed(3)}.`;
+    const live = { XGBoost: s.xgb, "Logistic Regression": s.lr };
+    $("cust-probs").replaceChildren(...D.metrics.slice().sort((a, b) => b.roc_auc - a.roc_auc).map((r) => {
+      const tr = document.createElement("tr");
+      const p = state.edits ? live[r.model] : D.proba[r.model][state.pos];
+      tr.append(cell("t", modelLabel(r.model)), cell("", p === undefined ? "-" : fmtP(p)), cell("", Number(r.roc_auc).toFixed(3)));
+      if (r.model === "XGBoost") tr.style.fontWeight = "700";
+      return tr;
+    }));
 
     const phi = shapNow();
-    const signals = $("main-signals");
-    signals.replaceChildren();
     if (!phi) {
-      signals.innerHTML = "<li>The in-browser explanation is off because its check against the notebook did not pass.</li>";
+      $("main-signals").replaceChildren(Object.assign(document.createElement("tr"), { innerHTML: "<td class='t'>The in-browser explanation is off because its check against the notebook failed.</td>" }));
       $("cust-shap").replaceChildren();
       $("hypothesis").replaceChildren();
-      $("hyp-basis").textContent = "";
       return;
     }
     const g = groupShap(featureNames, phi, D.base_features);
     const ranked = D.base_features.map((f) => [f, g[f]]).sort((a, b) => Math.abs(b[1]) - Math.abs(a[1]));
-    for (const [f, value] of ranked.slice(0, 3)) {
-      const li = document.createElement("li");
-      li.innerHTML = `<strong>${label(f)}: ${fmtVal(f, x[f])}</strong><span class="${value >= 0 ? "up" : "down"}">${value >= 0 ? "Raises" : "Lowers"} the score</span>`;
-      signals.appendChild(li);
-    }
-    svgWaterfall($("cust-shap"), ranked.map(([f, value]) => ({ label: `${label(f)}: ${fmtVal(f, x[f])}`, value })), { maxItems: 19 });
-    const ev = D.provenance.expected_value;
-    $("cust-shap-caption").textContent = `Bars are on the log-odds scale. Starting from the model's baseline of ${fmtP(sigmoid(ev))} (its average log-odds), the contributions add up to this customer's ${fmtP(s.xgb)}.`;
+    $("main-signals").replaceChildren(...ranked.slice(0, 3).map(([f, value]) => {
+      const tr = document.createElement("tr");
+      tr.append(cell("t", `${f} = ${fmtVal(f, x[f])}`), cell(value >= 0 ? "pos" : "neg", `${value >= 0 ? "+" : "-"}${Math.abs(value).toFixed(2)}`));
+      return tr;
+    }));
+    svgWaterfall($("cust-shap"), ranked.map(([f, value]) => ({ label: `${f} = ${fmtVal(f, x[f])}`, value })), { maxItems: 19 });
+    $("cust-shap-caption").textContent = `Baseline ${fmtP(sigmoid(D.provenance.expected_value))} (average log-odds); the contributions add up to ${fmtP(s.xgb)}.`;
 
     const pick = ranked.find(([f]) => L.ui.hypothesis_for[f]);
     const h = pick && L.ui.hypotheses[L.ui.hypothesis_for[pick[0]]];
-    $("hyp-basis").textContent = h ? `Based on ${label(pick[0]).toLowerCase()}, one of the details that moved this score most.` : "";
     $("hypothesis").innerHTML = h
-      ? [["Observed signal", h.signal], ["Possible interpretation", h.interpretation], ["Alternative explanation", h.alternative], ["What a platform could test", h.test]].map(([dt, dd]) => `<dt>${dt}</dt><dd>${dd}</dd>`).join("")
-      : "<dd>None of this customer's main signals has a hypothesis in the TCC's Table 6.</dd>";
+      ? [["Observed signal", h.signal], ["Possible interpretation", h.interpretation], ["Alternative explanation", h.alternative], ["What a platform could test", h.test]].map(([k, v]) => `<tr><th>${k}</th><td>${v}</td></tr>`).join("")
+      : "<tr><td>None of the largest contributions has a row in Table 6.</td></tr>";
   }
 
-  // ---------------------------------------------------------------- 4 who gets flagged
+  // ---------------------------------------------------------------- cutoff
   function renderThreshold() {
     const t = state.cutoff;
     $("thr").value = t;
@@ -708,16 +684,14 @@ if (typeof module !== "undefined") {
       .map(([cls, n]) => `<span class="${cls}" style="width:${(100 * n / N_TEST).toFixed(2)}%"></span>`).join("");
     $("k-flagged").textContent = String(r.tp + r.fp);
     $("k-tp").textContent = String(r.tp);
-    $("k-recall").textContent = `${Math.round(100 * r.tp / left)}% of those who left`;
+    $("k-recall").textContent = `recall ${Math.round(100 * r.tp / left)}%`;
     $("k-fp").textContent = String(r.fp);
     $("k-fn").textContent = String(r.fn);
-    const s = scores();
-    $("thr-customer").textContent = `Customer ${D.customers[state.pos].customerID}${state.edits ? " (edited)" : ""}, with a score of ${fmtP(s.xgb)}, ${s.xgb >= t ? "is flagged" : "is not flagged"} at this cutoff.`;
   }
 
-  function renderCustomer() {
-    renderData();
-    renderPrep();
+  function update() {
+    refreshRow();
+    renderEncoded();
     renderScore();
     renderThreshold();
   }
@@ -725,7 +699,8 @@ if (typeof module !== "undefined") {
     state.pos = pos;
     state.edits = null;
     state.autoTotal = false;
-    renderCustomer();
+    buildData();
+    update();
   }
 
   // ---------------------------------------------------------------- self-check
@@ -743,23 +718,12 @@ if (typeof module !== "undefined") {
     }
     state.shapJsOk = maxS < 1e-3;
     const ok = maxP < 1e-5 && maxL < 1e-5;
-    $("selfcheck").textContent = `On loading, it checked ${idx.length} customers: the recomputed scores ${ok ? "match" : "DO NOT match"} the notebook's (largest difference ${Math.max(maxP, maxL).toExponential(1)}), and the SHAP values differ by at most ${maxS.toExponential(1)}${state.shapJsOk ? "" : ", so explanations of edited details are off"}.`;
+    $("selfcheck").textContent = `Check on ${idx.length} customers: the scores ${ok ? "match the notebook" : "DO NOT match the notebook"} (largest difference ${Math.max(maxP, maxL).toExponential(1)}); SHAP values differ by at most ${maxS.toExponential(1)}${state.shapJsOk ? "" : ", so edited rows are not explained"}.`;
   }
 
   // ---------------------------------------------------------------- wiring
   function init() {
     if (new URLSearchParams(window.location.search).get("presentation") === "1") document.body.classList.add("presentation");
-    const g = L.ui.gloss;
-    $("gloss").innerHTML = Object.keys(g).map((key) => `<div><b>${key}</b> ${g[key]}</div>`).join("");
-    const contract = $("ed-contract");
-    for (const cat of D.pre.categorical.find((c) => c.name === "Contract").categories) {
-      const o = document.createElement("option");
-      o.value = cat; o.textContent = cat;
-      contract.appendChild(o);
-    }
-    contract.addEventListener("change", () => setEdit({ Contract: contract.value }, false));
-    $("ed-tenure").addEventListener("input", (e) => setEdit({ tenure: Number(e.target.value) }, true));
-    $("ed-monthly").addEventListener("input", (e) => setEdit({ MonthlyCharges: Number(e.target.value) }, true));
     $("ed-reset").addEventListener("click", () => select(state.pos));
     $("btn-more").addEventListener("click", () => {
       const pool = D.customers.map((_, i) => i).filter((i) => !state.rows.includes(i));
@@ -777,7 +741,7 @@ if (typeof module !== "undefined") {
     $("thr").addEventListener("input", (e) => { state.cutoff = Number(e.target.value); renderScore(); renderThreshold(); });
     for (const b of document.querySelectorAll("[data-cut]")) b.addEventListener("click", () => { state.cutoff = Number(b.dataset.cut); renderScore(); renderThreshold(); });
     selfCheck();
-    renderCustomer();
+    select(state.pos);
   }
   document.addEventListener("DOMContentLoaded", init);
 })();
