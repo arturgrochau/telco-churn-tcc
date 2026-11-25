@@ -11,7 +11,7 @@ This repository holds the product described in Section 4.4 of the TCC.
 |---|---|
 | [`churn_modeling.ipynb`](churn_modeling.ipynb) | The analytical notebook, organized by the six CRISP-DM phases and saved with its outputs. Every result table and figure in the TCC comes from it. |
 | [`TCC_Artur_Pedrotti_Grochau.pdf`](TCC_Artur_Pedrotti_Grochau.pdf) | The written TCC. |
-| [`demo/dist/demo.html`](demo/dist/demo.html) | The offline demonstration, in the TCC's order: the first rows of the data before and after preprocessing, the five models' results, who is flagged at each cutoff, and one test customer's score, SHAP contributions and communication hypothesis, with an editable profile. Download the file and open it in a web browser; it needs no installation or internet connection. |
+| [`demo/dist/demo.html`](demo/dist/demo.html) | The offline demonstration, in the TCC's order: the first rows of the data and churn rates by group, the five models' results, who is flagged at each cutoff, the variables XGBoost relies on most, and one test customer's score, SHAP contributions and communication hypothesis, with the five most important variables adjustable. Download the file and open it in a web browser; it needs no installation or internet connection. |
 | [`thesis_exports/`](thesis_exports/) | The tables (CSV) and figures (PDF and PNG) exported by the notebook, listed in [`export_manifest.csv`](thesis_exports/tables/export_manifest.csv). |
 | [`data/`](data/) | The input data, described below. |
 | `requirements.txt`, `.python-version`, [`scripts/`](scripts/) | The pinned environment and the reproducibility check. |
