@@ -1,6 +1,6 @@
 # Customer Churn Classification on a Telecom Benchmark
 
-*Comparing Models, Explaining XGBoost, and Developing Hypotheses for Digital Communication*
+*Model Comparison, SHAP Explainability, and Hypotheses for Digital Communication*
 
 Trabalho de Conclusão de Curso (TCC), Comunicação Digital, Escola de Comunicação, Mídia e Informação da Fundação Getulio Vargas (FGV ECMI), Rio de Janeiro, 2026.
 Author: Artur Pedrotti Grochau. Advisor: Prof. Dr. Matheus Cavalcanti Pestana.
