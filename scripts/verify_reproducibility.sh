@@ -72,6 +72,15 @@ if [[ ! -f "$NOTEBOOK" || ! -f "$REQUIREMENTS" ]]; then
   exit 3
 fi
 
+# The comparison reads the reference tables from git, so a ZIP download cannot be
+# verified. Say so before the long notebook run instead of reporting drift after it.
+if [[ -z "$REFERENCE_DIR" ]] \
+   && ! git -C "$REPO_ROOT" cat-file -e "$REFERENCE:thesis_exports/tables" 2>/dev/null; then
+  log "ERROR: not a git checkout. Clone the repository with git (a ZIP download"
+  log "       has no committed tables to compare with), or set REFERENCE_DIR."
+  exit 3
+fi
+
 if ! command -v uv >/dev/null 2>&1; then
   log "ERROR: uv is required to build the pinned environment."
   exit 1
